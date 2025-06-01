@@ -1,0 +1,7 @@
+Usecase: vaedo-tube-link
+Name:  vaedotube integration
+Author: Hai
+CompatibleWith: tosu
+Resolution: 1x1
+authorLinks: https://github.com/WhatTheHai
+Notes: Made for BBL
