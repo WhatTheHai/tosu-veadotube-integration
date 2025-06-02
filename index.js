@@ -23,6 +23,9 @@ function bubanMoment(combo_percent) {
     return;
   }
   let bubanTime = 10**((3 * combo_percent - 1) / 2) * 1000;
+  if (cache.BubanMinimum > bubanTime) {
+    bubanTime = cache.BubanMinimum;
+  }
 
   // Send buban payload
   const bubanPayload = createSetPayLoad("BUBAN");
