@@ -10,7 +10,7 @@ const cache = {
   combo: -1,
   baseBuban: 1000,
   mapLength: -1,
-  reverseChoked: 0,
+  stateChange: 0,
   veadoPort: 8085,
   minimumComboPercent: 33
 };
@@ -48,7 +48,6 @@ function connectVeadoSocket() {
 // }
 
 function bubanMoment(combo_percent) {
-  //TODO change percent threshold with a setting
   if (combo_percent < (cache.minimumComboPercent/100)) {
     return;
   }
@@ -67,6 +66,22 @@ function bubanMoment(combo_percent) {
     restoreBlem();
   }, bubanTime);
   console.log(`BUBAN mode activated for ${bubanTime / 1000} seconds`);
+}
+
+function blemMoment() {
+  //scale blemPrime
+  //TODO mirror map length custom value here
+  let blemPrime = 10000*cache.mapLength/180000
+
+  // Send prime payload
+  const primePayload = createSetPayLoad("BLEM-PRIME");
+  veadoSocket.send("nodes: " + JSON.stringify(primePayload));
+
+  // Restore BLEM state after bubanTime
+  setTimeout(() => {
+    restoreBlem();
+  }, blemPrime);
+  console.log(`BLEM-PRIME mode activated for ${blemPrime / 1000} seconds`);
 }
 
 
@@ -127,14 +142,19 @@ socket.api_v2(({ play, beatmap }) => {
 	  }
 
       cache.combo = play.combo;
-	  if (beatmap.time.live >= cache.mapLength) {
+	  if (beatmap.time.live >= beatmap.time.lastObject) {
 		let reverseChokeRatio = cache.combo.current / cache.maxCombo;
-		if (reverseChokeRatio > 0.85 && !cache.reverseChoked) {
+		if (reverseChokeRatio > 0.85 && !cache.stateChange) {
 			if (play.hits[0] || play.hits.sliderBreaks) {
 				console.log(`inside reverse choke statement`);
 				bubanMoment(reverseChokeRatio)
-				cache.reverseChoked = 1;
+				cache.stateChange = 1;
 			}
+		}
+		if (!play.hits[0] && !play.hits.sliderBreaks && play.combo.max && !cache.stateChange) {
+				console.log(`inside fc statement`);
+				blemMoment();
+				cache.stateChange = 1;
 		}
 	  }
     }
@@ -142,7 +162,7 @@ socket.api_v2(({ play, beatmap }) => {
     if (cache.maxCombo != beatmap.stats.maxCombo) {
       cache.maxCombo = beatmap.stats.maxCombo;
 	  cache.mapLength = beatmap.time.lastObject - beatmap.time.firstObject;
-	  cache.reverseChoked = 0;
+	  cache.stateChange = 0;
     }
   } catch (error) {
     console.log(error);
