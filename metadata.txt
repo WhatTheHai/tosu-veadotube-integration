@@ -1,5 +1,5 @@
-Usecase: vaedo-tube-link
-Name:  vaedotube integration
+Usecase: veado-tube-link
+Name:  veadotube integration
 Author: malteser, WhatTheHai, Bubbleman
 CompatibleWith: tosu
 Resolution: 1x1

@@ -7,5 +7,23 @@
         "values": [],
         "value": 1000,
         "required": true
+    },
+    {
+        "uniqueID": "veadoPort",
+        "type": "number",
+        "title": "Veadotube Port",
+        "description": "Port for the Veadotube Websocket",
+        "values": [],
+        "value": 8085,
+        "required": true
+    },
+    {
+        "uniqueID": "minimumComboPercent",
+        "type": "number",
+        "title": "Minimum Combo threshold",
+        "description": "Set the combo threshold for the change to appear, in percent",
+        "values": [],
+        "value": 33,
+        "required": true
     }
 ]
