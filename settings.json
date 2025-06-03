@@ -1,9 +1,9 @@
 [
     {
-        "uniqueID": "BubanMinimum",
+        "uniqueID": "baseBuban",
         "type": "number",
-        "title": "Buban Minimum Length",
-        "description": "In milliseconds (ms).",
+        "title": "Base Time",
+        "description": "In milliseconds (ms). Scaled around default of 1000",
         "values": [],
         "value": 1000,
         "required": true
