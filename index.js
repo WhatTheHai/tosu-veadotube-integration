@@ -137,7 +137,9 @@ function onSocketOpen() {
 
 // receive message update from websocket
 socket.api_v2(({ play, beatmap }) => {
+  
   try {
+	if (beatmap.time.live <= 0) {cache.stateChange = 0}
     if (cache.combo !== play.combo) {
       if (play.combo.current < cache.combo.current) {
 		console.log(`${play.hits[0]} && ${play.hits.sliderBreaks}`);
