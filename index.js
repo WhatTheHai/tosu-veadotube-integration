@@ -30,12 +30,14 @@ function connectVeadoSocket() {
   veadoSocket = new WebSocket(`ws://127.0.0.1:${cache.veadoPort}/?n=blemtuber`);
 
   veadoSocket.onopen = () => {
+    setDisplayContainer('veadoStatusText', 'Connected to VeadoTube WebSocket on port ' + cache.veadoPort);
     console.log('Connected to VeadoTube WebSocket');
   }
   veadoSocket.onerror = (error) => {
     console.error('WebSocket error:', error);
   }
   veadoSocket.onclose = () => {
+    setDisplayContainer('veadoStatusText', 'VeadoTube WebSocket connection closed, attempting to reconnect...');;
     console.log('VeadoTube WebSocket connection closed, attempting to reconnect...');
     // Attempt to reconnect after a three second delay.
     veadoReconnectTimer = setTimeout(connectVeadoSocket, 3000);
@@ -101,6 +103,12 @@ function createSetPayLoad(state) {
         "state": state
     }
   }
+}
+
+//
+function setDisplayContainer(containerId, message) {
+    let displayContainer = document.getElementById(containerId);
+    displayContainer.innerHTML = message;
 }
 
 function onSocketOpen() {
