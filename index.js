@@ -49,7 +49,7 @@ function connectVeadoSocket() {
 
 function bubanMoment(combo_percent) {
   //TODO change percent threshold with a setting
-  if (combo_percent < (minimumComboPercent/100)) {
+  if (combo_percent < (cache.minimumComboPercent/100)) {
     return;
   }
   let bubanTime = 10**((3 * combo_percent - 1) / 2) * cache.baseBuban;
