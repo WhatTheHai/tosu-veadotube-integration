@@ -1,7 +1,5 @@
 // Connecting to websocket
 import WebSocketManager from './js/socket.js';
-const socket = new WebSocketManager('127.0.0.1:24050');
-socket.onopen = onSocketOpen();
 let veadoSocket;
 let veadoReconnectTimer;
 
@@ -17,6 +15,8 @@ const cache = {
   minimumComboPercent: 33
 };
 
+const socket = new WebSocketManager('127.0.0.1:24050');
+socket.onopen = onSocketOpen();
 
 function connectVeadoSocket() {
   // When changing the port, close the previous connection if it exists
@@ -89,6 +89,8 @@ function createSetPayLoad(state) {
 }
 
 function onSocketOpen() {
+  // Initial connection to VaedoSocket
+  connectVeadoSocket();
   socket.sendCommand('getSettings', encodeURI(window.COUNTER_PATH));
   socket.commands(async (data) => {
       try {
