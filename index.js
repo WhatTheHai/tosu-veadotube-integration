@@ -12,7 +12,10 @@ const cache = {
   mapLength: -1,
   stateChange: 0,
   veadoPort: 8085,
-  minimumComboPercent: 33
+  minimumComboPercent: 33,
+  defaultState: "BLEM",
+  shockedState: "BUBAN",
+  celebrationState: "BLEM-PRIME"
 };
 
 const socket = new WebSocketManager('127.0.0.1:24050');
@@ -60,7 +63,7 @@ function bubanMoment(combo_percent) {
   bubanTime = bubanTime * cache.mapLength/180000;
 
   // Send buban payload
-  const bubanPayload = createSetPayLoad("BUBAN");
+  const bubanPayload = createSetPayLoad(cache.shockedState);
   veadoSocket.send("nodes: " + JSON.stringify(bubanPayload));
 
   // Restore BLEM state after bubanTime
@@ -76,7 +79,7 @@ function blemMoment() {
   let blemPrime = 10000*cache.mapLength/180000
 
   // Send prime payload
-  const primePayload = createSetPayLoad("BLEM-PRIME");
+  const primePayload = createSetPayLoad(cache.celebrationState);
   veadoSocket.send("nodes: " + JSON.stringify(primePayload));
 
   // Restore BLEM state after bubanTime
@@ -88,7 +91,7 @@ function blemMoment() {
 
 
 function restoreBlem() {
-  const blemPayload = createSetPayLoad("BLEM");
+  const blemPayload = createSetPayLoad(cache.defaultState);
   veadoSocket.send("nodes: " + JSON.stringify(blemPayload));
 }
 
@@ -128,6 +131,15 @@ function onSocketOpen() {
           }
           if (message['minimumComboPercent'] != null) {
               cache['minimumComboPercent'] = message['minimumComboPercent'];
+          }
+		  if (message['defaultState'] != null) {
+              cache['defaultState'] = message['defaultState'];
+          }
+		  if (message['shockedState'] != null) {
+              cache['shockedState'] = message['shockedState'];
+          }
+		  if (message['celebrationState'] != null) {
+              cache['celebrationState'] = message['celebrationState'];
           }
       } catch (error) {
           console.log(error);
